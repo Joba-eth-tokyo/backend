@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { UsersDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { isNil } from 'lodash';
+import { getRandomGravatarAvatarByUserId } from './random-avatar/avatar';
 
 // This should be a real class/interface representing a user entity
 // export type User = any;
@@ -18,7 +20,13 @@ export class UsersService {
     user.display_name = createUserDto.display_name;
     user.email = createUserDto.email;
     user.wallet_address = createUserDto.wallet_address;
-    user.profile_photo = createUserDto.profile_photo;
+
+    // default random avatar from wallet address
+    const plink = createUserDto.profile_photo;
+    if (isNil(plink) || plink === '') {
+      user.profile_photo = getRandomGravatarAvatarByUserId(createUserDto.wallet_address);
+    }
+
     user.telegram_user_link = createUserDto.telegram_user_link;
     user.phone = createUserDto.phone;
     user.residential_address = createUserDto.residential_address;
