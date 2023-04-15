@@ -87,7 +87,7 @@ export class InvoiceService {
 
   async updateStatus(id: string, invoiceDto: Invoice) {
     try {
-      const updatedInvoice = {
+    const updatedInvoice = {
         status: invoiceDto.status,
       };
       if (invoiceDto.amount) {
@@ -95,6 +95,7 @@ export class InvoiceService {
         updatedInvoice.amount = invoiceDto.amount;
       }
       if (invoiceDto.interval_duration){
+        // @ts-ignore
         updatedInvoice.interval_duration = invoiceDto.interval_duration;
       }
 
