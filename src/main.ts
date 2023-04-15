@@ -6,7 +6,9 @@ import * as helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
-  app.enableCors({ origin: '*', methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', preflightContinue: false, optionsSuccessStatus: 204 });
+  app.enableCors({
+    origin: ['http://localhost:3000', 'https://joba-next-itg46o62y-highstack.vercel.app/', 'https://joba-next.vercel.app/'],
+  });
   app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()

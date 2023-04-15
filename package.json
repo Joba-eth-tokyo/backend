@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist && yarn run schema:sync",
-    "build": "yarn run schema:sync && yarn run seed:run && nest build && yarn run update:migration",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -23,7 +23,6 @@
     "add:migration": "yarn run build && yarn run typeorm migration:generate -- -n",
     "apply:migration": "yarn run build && yarn run typeorm migration:run",
     "revert:migration": "yarn run build && yarn run typeorm migration:revert",
-    "update:migration": "yarn run typeorm migration:run",
     "drop:database": "yarn run typeorm schema:drop",
     "seed:run": "ts-node -r tsconfig-paths/register src/database/seeds/run-seed.ts",
     "setup:proj": "./setup.sh"
