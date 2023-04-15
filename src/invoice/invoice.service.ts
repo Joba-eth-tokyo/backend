@@ -30,6 +30,9 @@ export class InvoiceService {
     invoice.currency = createInvoiceDto.currency;
     invoice.due_date = createInvoiceDto.due_date;
     invoice.user_id = user.id;
+    invoice.interval_duration = createInvoiceDto.interval_duration;
+    invoice.flow_rate_per_second = createInvoiceDto.flow_rate_per_second;
+    invoice.payer_wallet = createInvoiceDto.payer_wallet;
 
     await validate(CreateInvoiceDto).then((errors) => {
       if (errors.length > 0) {
@@ -71,7 +74,7 @@ export class InvoiceService {
           id,
         },
         {
-          relations: ['invoice_status'],
+          relations: ['invoice_status', 'user'],
         },
       );
 
@@ -84,12 +87,24 @@ export class InvoiceService {
 
   async updateStatus(id: string, invoiceDto: Invoice) {
     try {
-      const response = await this.invoiceRepository.update(id, {
+      const updatedInvoice = {
         status: invoiceDto.status,
-      });
+      };
+      if (invoiceDto.amount) {
+        // @ts-ignore
+        updatedInvoice.amount = invoiceDto.amount;
+      }
+      if (invoiceDto.interval_duration){
+        updatedInvoice.interval_duration = invoiceDto.interval_duration;
+      }
 
+      const response = await this.invoiceRepository.update(id, {
+        ...updatedInvoice
+      });
+      
       return { status: 200, content: { sucess: true, data: response } };
     } catch (error) {
+      console.log("updatestatus fucked")
       this.logger.debug(error.message);
       return { status: 400, content: { sucess: false, msg: error.message } };
     }
