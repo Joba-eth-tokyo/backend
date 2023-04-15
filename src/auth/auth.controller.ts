@@ -65,4 +65,28 @@ export class AuthController {
       res.status(400).json({ message: 'User not found', ok: false });
     }
   }
+
+  @Get('user/:address')
+  @ApiParam({
+    name: 'address',
+    schema: {
+      example: '0xca25c45e67E0e8A748F83916f4EFB5D95bbeB4da',
+    },
+  })
+  async getUserData(@Req() req, @Res() res, @Body() body, @Param('address') address) {
+    const userData = await this.authService.findUserDataByAddress(address);
+    if (userData) {
+      const userDetails = {
+        ...userData,
+        user: {
+          ...userData.user,
+          residential_address: JSON.parse(`${userData.user.residential_address}`),
+          phone: JSON.parse(`${userData.user.phone}`),
+        },
+      };
+      res.status(200).json(userDetails);
+    } else {
+      res.status(400).json({ message: 'User not found', ok: false });
+    }
+  }
 }

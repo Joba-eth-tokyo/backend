@@ -9,6 +9,7 @@ import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { LoggerModule } from 'src/logger/logger.module';
+import { ProjectModule } from 'src/project/project.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { LoggerModule } from 'src/logger/logger.module';
     }),
     UsersModule,
     TypeOrmModule.forFeature([User]),
+    ProjectModule,
   ],
   providers: [AuthService, JwtStrategy],
   exports: [AuthService, JwtModule, PassportModule],

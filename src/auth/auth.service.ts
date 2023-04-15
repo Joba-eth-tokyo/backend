@@ -7,6 +7,7 @@ import { validate } from 'class-validator';
 import { LoggerService } from 'src/logger/logger.service';
 import { UsersService } from 'src/users/users.service';
 import { ethers } from 'ethers';
+import { ProjectService } from 'src/project/project.service';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
     private readonly logger: LoggerService = new Logger(AuthService.name),
     private jwtService: JwtService,
     private userservice: UsersService,
+    private projectservice: ProjectService,
   ) {}
 
   async login(user: any): Promise<Record<string, any>> {
@@ -125,5 +127,17 @@ export class AuthService {
     } else {
       return { status: 400, content: { msg: 'Invalid content' } };
     }
+  }
+
+  async findUserDataByAddress(wallet_address: string) {
+    const userData = await this.userservice.findOneByAddres(wallet_address);
+
+    const projectsRes = await this.projectservice.findAll(userData);
+    const projects = projectsRes.content.data;
+
+    return {
+      user: userData,
+      projects,
+    };
   }
 }
