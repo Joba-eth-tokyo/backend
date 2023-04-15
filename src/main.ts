@@ -6,8 +6,16 @@ import * as helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+    next();
+  });
+
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://joba-next-itg46o62y-highstack.vercel.app/', 'https://joba-next.vercel.app/'],
+    allowedHeaders: '*',
+    origin: '*',
   });
   app.setGlobalPrefix('api');
 
